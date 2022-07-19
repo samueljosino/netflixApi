@@ -26,18 +26,18 @@ export class DescriptionService {
   }
 
   static async delete(id: number) {
-    const musicianRepository = getRepository(Description);
-    const musicians = await musicianRepository.softRemove({ id });
-    console.log(musicians);
-    return musicians;
+    const descriptionRepository = getRepository(Description);
+    const descriptions = await descriptionRepository.softRemove({ id });
+    console.log(descriptions);
+    return descriptions;
   }
 
   static async findById(id: number) {
-    const musicianRepository = getRepository(Description);
-    const musician = await musicianRepository.findOne({
+    const descriptionRepository = getRepository(Description);
+    const description = await descriptionRepository.findOne({
       where: { id },
       //   relations: [""],
     });
-    return musician;
+    return description;
   }
 }

@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Movie } from "./Movie";
 
 @Entity("category")
 export class Category {
@@ -30,4 +31,7 @@ export class Category {
   @Column()
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @ManyToMany(() => Movie, (movie) => movie.categories)
+  movies: Movie[];
 }

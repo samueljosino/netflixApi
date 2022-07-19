@@ -8,8 +8,12 @@ class MovieController {
   }
 
   static async create(req: Request, res: Response, next: NextFunction) {
-    const { name, descriptionText } = req.body;
-    const response = await MovieService.create(name, descriptionText);
+    const { name, descriptionText, movieCategoryId } = req.body;
+    const response = await MovieService.create(
+      name,
+      descriptionText,
+      movieCategoryId
+    );
     res.status(200).json(response);
   }
 

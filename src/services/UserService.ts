@@ -26,18 +26,18 @@ export class UserService {
   }
 
   static async delete(id: number) {
-    const musicianRepository = getRepository(User);
-    const musicians = await musicianRepository.softRemove({ id });
-    console.log(musicians);
-    return musicians;
+    const userRepository = getRepository(User);
+    const users = await userRepository.softRemove({ id });
+    console.log(users);
+    return users;
   }
 
   static async findById(id: number) {
-    const musicianRepository = getRepository(User);
-    const musician = await musicianRepository.findOne({
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({
       where: { id },
       //   relations: [""],
     });
-    return musician;
+    return user;
   }
 }

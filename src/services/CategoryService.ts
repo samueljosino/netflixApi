@@ -7,6 +7,12 @@ export class CategoryService {
     const category = await categoryRepository.find();
     return category;
   }
+  static async find(ids: number[] | string[]) {
+    const categoryRepository = getRepository(Category);
+    const categories = await categoryRepository.findByIds(ids);
+    console.log(categories);
+    return categories;
+  }
 
   static async create(name: string) {
     const categoryRepository = getRepository(Category);
@@ -26,18 +32,18 @@ export class CategoryService {
   }
 
   static async delete(id: number) {
-    const musicianRepository = getRepository(Category);
-    const musicians = await musicianRepository.softRemove({ id });
-    console.log(musicians);
-    return musicians;
+    const categoryRepository = getRepository(Category);
+    const categorys = await categoryRepository.softRemove({ id });
+    console.log(categorys);
+    return categorys;
   }
 
   static async findById(id: number) {
-    const musicianRepository = getRepository(Category);
-    const musician = await musicianRepository.findOne({
+    const categoryRepository = getRepository(Category);
+    const category = await categoryRepository.findOne({
       where: { id },
       //   relations: [""],
     });
-    return musician;
+    return category;
   }
 }

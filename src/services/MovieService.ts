@@ -1,6 +1,8 @@
 import { getRepository } from "typeorm";
+import { Category } from "../entities/Category";
 import { Description } from "../entities/Description";
 import { Movie } from "../entities/Movie";
+import { CategoryService } from "./CategoryService";
 import { DescriptionService } from "./DescriptionService";
 
 export class MovieService {
@@ -12,7 +14,13 @@ export class MovieService {
     return movies;
   }
 
-  static async create(name: string, descriptionText: string) {
+  static async create(
+    name: string,
+    descriptionText: string,
+    categoriesId: string[]
+  ) {
+    const categories = await CategoryService.find(categoriesId);
+
     const descriptionRepository = await getRepository(Description);
     const description: Description = await descriptionRepository.create({
       name: descriptionText,
@@ -22,7 +30,9 @@ export class MovieService {
     const movie = await movieRepository.create({
       name,
       description: description,
+      categories,
     });
+
     movieRepository.save(movie);
     return movie;
   }
@@ -37,18 +47,18 @@ export class MovieService {
   }
 
   static async delete(id: number) {
-    const musicianRepository = getRepository(Movie);
-    const musicians = await musicianRepository.softRemove({ id });
-    console.log(musicians);
-    return musicians;
+    const movieRepository = getRepository(Movie);
+    const movies = await movieRepository.softRemove({ id });
+    console.log(movies);
+    return movies;
   }
 
   static async findById(id: number) {
-    const musicianRepository = getRepository(Movie);
-    const musician = await musicianRepository.findOne({
+    const movieRepository = getRepository(Movie);
+    const movie = await movieRepository.findOne({
       where: { id },
       //   relations: [""],
     });
-    return musician;
+    return movie;
   }
 }

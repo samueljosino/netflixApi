@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Category } from "./Category";
 import { Description } from "./Description";
 
 @Entity("movie")
@@ -35,6 +36,10 @@ export class Movie {
   @OneToOne(() => Description)
   @JoinColumn()
   description: Description;
+
+  @ManyToMany(() => Category, (category) => category.movies)
+  @JoinTable()
+  categories: Category[];
 }
 
 // movie manyToMany Category
