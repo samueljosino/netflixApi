@@ -41,6 +41,3 @@ export class Movie {
   @JoinTable()
   categories: Category[];
 }
-
-// movie manyToMany Category
-// User oneToMany Profile

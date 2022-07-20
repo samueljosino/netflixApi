@@ -1,16 +1,22 @@
 import { getRepository } from "typeorm";
 import { Profile } from "../entities/Profile";
+import { UserService } from "./UserService";
 
 export class ProfileService {
   static async findAll() {
     const profileRepository = getRepository(Profile);
     const profiles = await profileRepository.find();
+    console.log(profiles);
     return profiles;
   }
 
-  static async create(name: string) {
+  static async create(name: string, userId: number) {
+    const user = await UserService.findById(userId);
+    if (!user) {
+      throw new Error("Esse userId não existe!");
+    }
     const profileRepository = getRepository(Profile);
-    const profiles = profileRepository.create({ name });
+    const profiles = profileRepository.create({ name, user });
     profileRepository.save(profiles);
     console.log(profiles);
     return profiles;

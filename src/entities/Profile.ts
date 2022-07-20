@@ -6,10 +6,12 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { User } from "./User";
 
 @Entity("profile")
 export class Profile {
@@ -30,4 +32,8 @@ export class Profile {
   @Column()
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.profiles)
+  @JoinColumn()
+  user: User;
 }

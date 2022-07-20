@@ -1,5 +1,6 @@
 import { NextFunction, Request, response, Response } from "express";
 import { ProfileService } from "../services/ProfileService";
+import { UserService } from "../services/UserService";
 
 class ProfileController {
   static async findAll(req: Request, res: Response, next: NextFunction) {
@@ -8,8 +9,8 @@ class ProfileController {
   }
 
   static async create(req: Request, res: Response, next: NextFunction) {
-    const { name } = req.body;
-    const response = await ProfileService.create(name);
+    const { name, userId } = req.body;
+    const response = await ProfileService.create(name, userId);
     res.status(200).json(response);
   }
 

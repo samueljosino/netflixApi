@@ -4,7 +4,9 @@ import { User } from "../entities/User";
 export class UserService {
   static async findAll() {
     const userRepository = getRepository(User);
-    const users = await userRepository.find();
+    const users = await userRepository.find({
+      relations: ["profiles"],
+    });
     return users;
   }
 

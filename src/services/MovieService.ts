@@ -57,7 +57,7 @@ export class MovieService {
     const movieRepository = getRepository(Movie);
     const movie = await movieRepository.findOne({
       where: { id },
-      //   relations: [""],
+      // relations: [""],
     });
     return movie;
   }
