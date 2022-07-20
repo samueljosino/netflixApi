@@ -1,10 +1,16 @@
+const path = require("path");
+
+require("dotenv").config({
+  path: path.resolve("enviroments", ".env"),
+});
+console.log(process.env.TYPEORM_TYPE);
 const typeORMConnectionOptions = {
-  type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "postgres",
-  password: "468146",
-  database: "netflixdatabase",
+  type: process.env.TYPEORM_TYPE,
+  host: process.env.TYPEORM_HOST,
+  port: Number(process.env.TYPEORM_PORT),
+  username: process.env.TYPEORM_USERNAME,
+  password: process.env.TYPEORM_PASSWORD,
+  database: process.env.TYPEORM_DATABASE,
   entities: ["src/entities/*.{js,ts}"],
   synchronize: true,
   migrations: [`src/database/migrations/*/.ts`],
