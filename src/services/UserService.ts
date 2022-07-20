@@ -10,9 +10,9 @@ export class UserService {
     return users;
   }
 
-  static async create(name: string) {
+  static async create(name: string, password: string) {
     const userRepository = getRepository(User);
-    const users = userRepository.create({ name });
+    const users = userRepository.create({ name, password });
     userRepository.save(users);
     console.log(users);
     return users;

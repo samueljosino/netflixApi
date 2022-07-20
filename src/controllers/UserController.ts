@@ -8,8 +8,8 @@ class UserController {
   }
 
   static async create(req: Request, res: Response, next: NextFunction) {
-    const { name } = req.body;
-    const response = await UserService.create(name);
+    const { name, password } = req.body;
+    const response = await UserService.create(name, password);
     res.status(200).json(response);
   }
 

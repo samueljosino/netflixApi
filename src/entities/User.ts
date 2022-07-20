@@ -1,17 +1,17 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Profile } from "./Profile";
+
+import * as bcrypt from "bcrypt";
 
 @Entity("user")
 export class User {
@@ -20,6 +20,9 @@ export class User {
 
   @Column()
   name: string;
+
+  @Column()
+  password: string;
 
   @Column()
   @CreateDateColumn()
@@ -36,4 +39,9 @@ export class User {
   @OneToMany(() => Profile, (profile) => profile.user)
   @JoinColumn()
   profiles: Profile[];
+
+  @BeforeInsert()
+  hashPassword() {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
 }

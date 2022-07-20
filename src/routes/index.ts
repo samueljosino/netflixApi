@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authRouter } from "./auth";
 import { categoryRouter } from "./category";
 import { descriptionRouter } from "./description";
 import { movieRouter } from "./movies";
@@ -16,5 +17,7 @@ routes.use("/user", userRouter);
 routes.use("/profile", profileRouter);
 
 routes.use("/description", descriptionRouter);
+
+routes.use("/auth", authRouter);
 
 export { routes };
