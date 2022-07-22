@@ -4,6 +4,7 @@ import { createConnection } from "typeorm";
 import "reflect-metadata";
 import { clientErrorHandler } from "./src/middlewares/error/Client";
 import { PublicRoutes } from "./src/routes/Public";
+import { authMiddleware } from "./src/middlewares/authMiddleware";
 
 export class appController {
   static run() {
@@ -12,7 +13,7 @@ export class appController {
     app.use(express.json());
 
     app.use("/api", PublicRoutes);
-    app.use("/api", PrivateRoutes);
+    app.use("/api", authMiddleware, PrivateRoutes);
 
     app.use(clientErrorHandler);
 
