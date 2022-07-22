@@ -8,8 +8,19 @@ class AuthController {
     if (response) {
       res.status(200).json(response);
     }
-    if (!response) {
-      res.status(500).json({ message: "senha incorreta" });
+  }
+  static async createTokenFromRefreshToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { refreshTokenId } = req.body;
+
+    const response = await AuthService.createTokenFromRefreshToken(
+      refreshTokenId
+    );
+    if (response) {
+      res.status(200).json(response);
     }
   }
 }

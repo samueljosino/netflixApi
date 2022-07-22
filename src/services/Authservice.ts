@@ -5,6 +5,7 @@ import * as bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { JWT_CONFIG } from "../../enviroments/enviroments";
 import dayjs from "dayjs";
+import { AppError } from "../@types/AppError";
 
 export class AuthService {
   static async login(name: string, password: string) {
@@ -42,14 +43,14 @@ export class AuthService {
       .add(JWT_CONFIG.jwtSecretExpiresIn, "seconds")
       .unix();
 
-    const findRefreshToken = await refreshTokenRepository.findOne({
+    const refreshToken = await refreshTokenRepository.findOne({
       where: { user: { id: user.id } },
     });
 
-    if (findRefreshToken) {
-      refreshTokenRepository.merge(findRefreshToken, { expiresIn });
-      await refreshTokenRepository.save(findRefreshToken);
-      return findRefreshToken;
+    if (refreshToken) {
+      refreshTokenRepository.merge(refreshToken, { expiresIn });
+      await refreshTokenRepository.save(refreshToken);
+      return refreshToken;
     }
 
     const newRefreshToken = refreshTokenRepository.create({
@@ -62,5 +63,41 @@ export class AuthService {
     });
 
     return newRefreshToken;
+  }
+
+  // * verificar se o token exite no banco
+  // * se nao exisitr, retorna erro 403
+  // * se existir, verificar se o refreshtoken ta expirado
+  // * se o refreshtoken tiver expirado gera um erro 403 pro front que vai encaminhar para logout
+  // * se refreshtoken nao tiver expirado, apenas gera um novo token e aumenta o tempo do e manda pro front
+
+  static async createTokenFromRefreshToken(refreshTokenId: number) {
+    const refreshTokenRepository = getRepository(RefreshToken);
+
+    const refreshToken = await refreshTokenRepository.findOne({
+      where: { id: refreshTokenId },
+      relations: ["user"],
+    });
+    if (!refreshToken) {
+      throw new AppError(403, "refreshToken nao existe!");
+    }
+
+    const refreshTokenIsExpired = dayjs
+      .unix(refreshToken.expiresIn)
+      .isBefore(dayjs());
+
+    if (refreshTokenIsExpired) {
+      throw new AppError(403, "refreshToken expirado");
+    }
+    const token = AuthService.generateToken(refreshToken.user.id);
+
+    const expiresIn = dayjs()
+      .add(JWT_CONFIG.jwtSecretExpiresIn, "seconds")
+      .unix();
+
+    refreshTokenRepository.merge(refreshToken, { expiresIn });
+    await refreshTokenRepository.save(refreshToken);
+
+    return { token, refreshToken, user: refreshToken.user };
   }
 }
