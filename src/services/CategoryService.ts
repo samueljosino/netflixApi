@@ -33,9 +33,9 @@ export class CategoryService {
 
   static async delete(id: number) {
     const categoryRepository = getRepository(Category);
-    const categorys = await categoryRepository.softRemove({ id });
-    console.log(categorys);
-    return categorys;
+    const categories = await categoryRepository.softRemove({ id });
+    console.log(categories);
+    return categories;
   }
 
   static async findById(id: number) {
